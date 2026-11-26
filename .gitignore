@@ -1,0 +1,12 @@
+# 设计文档与实现计划：本地保留，不提交
+设计文档.md
+实现计划.md
+
+# 开发检查点、内部记录和截图缓存
+.checkpoints/
+
+# 依赖与系统文件
+node_modules/
+.DS_Store
+Thumbs.db
+*.log

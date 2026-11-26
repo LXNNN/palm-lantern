@@ -1,0 +1,8 @@
+{
+  "name": "cny-lantern-2027",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/lantern.test.js tests/gestures.test.js"
+  }
+}

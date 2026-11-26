@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4142a"/>
+      <stop offset="1" stop-color="#8a0303"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset="1" stop-color="#d4af37"/>
+    </linearGradient>
+    <linearGradient id="wool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf6"/>
+      <stop offset="1" stop-color="#f3e6d2"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f9ead2"/>
+      <stop offset="1" stop-color="#e8c9a2"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="280" cy="812" rx="200" ry="30" fill="#ffd36b" opacity="0.15"/>
+
+  <g>
+    <rect x="405" y="180" width="155" height="560" rx="10" fill="url(#red)" stroke="url(#gold)" stroke-width="10"/>
+    <rect x="421" y="196" width="123" height="528" rx="5" fill="none" stroke="url(#gold)" stroke-width="4" opacity="0.85"/>
+    <text x="482" y="300" text-anchor="middle" font-family="STKaiti, KaiTi, SimSun, serif" font-size="76" font-weight="bold" fill="#ffe9a8">新</text>
+    <text x="482" y="390" text-anchor="middle" font-family="STKaiti, KaiTi, SimSun, serif" font-size="76" font-weight="bold" fill="#ffe9a8">年</text>
+    <text x="482" y="480" text-anchor="middle" font-family="STKaiti, KaiTi, SimSun, serif" font-size="76" font-weight="bold" fill="#ffe9a8">快</text>
+    <text x="482" y="570" text-anchor="middle" font-family="STKaiti, KaiTi, SimSun, serif" font-size="76" font-weight="bold" fill="#ffe9a8">乐</text>
+    <circle cx="482" cy="620" r="10" fill="url(#gold)"/>
+    <path d="M482 630 L482 745" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+    <path d="M464 745 L464 800 M482 745 L482 810 M500 745 L500 800" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <g>
+    <rect x="222" y="710" width="38" height="82" rx="14" fill="#3b2418" stroke="url(#gold)" stroke-width="5"/>
+    <rect x="300" y="710" width="38" height="82" rx="14" fill="#3b2418" stroke="url(#gold)" stroke-width="5"/>
+    <rect x="218" y="778" width="46" height="18" rx="9" fill="url(#gold)"/>
+    <rect x="296" y="778" width="46" height="18" rx="9" fill="url(#gold)"/>
+  </g>
+
+  <g fill="url(#wool)" stroke="url(#gold)" stroke-width="7">
+    <circle cx="180" cy="530" r="80"/>
+    <circle cx="240" cy="500" r="88"/>
+    <circle cx="305" cy="505" r="86"/>
+    <circle cx="355" cy="545" r="78"/>
+    <circle cx="170" cy="600" r="76"/>
+    <circle cx="235" cy="620" r="92"/>
+    <circle cx="305" cy="620" r="88"/>
+    <circle cx="365" cy="600" r="74"/>
+  </g>
+
+  <path d="M160 610 Q270 560 380 610 L365 730 Q270 765 175 730 Z" fill="url(#red)" stroke="url(#gold)" stroke-width="9"/>
+  <path d="M178 720 Q270 755 362 720" fill="none" stroke="url(#gold)" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="270" cy="655" r="30" fill="url(#red)" stroke="url(#gold)" stroke-width="5"/>
+  <text x="270" y="670" text-anchor="middle" font-family="STKaiti, KaiTi, SimSun, serif" font-size="40" font-weight="bold" fill="#ffe9a8">福</text>
+  <circle cx="270" cy="700" r="7" fill="url(#gold)"/>
+
+  <path d="M342 600 Q410 535 420 445" fill="none" stroke="url(#red)" stroke-width="46" stroke-linecap="round"/>
+  <path d="M342 600 Q410 535 420 445" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="422" cy="438" r="27" fill="url(#skin)" stroke="url(#gold)" stroke-width="6"/>
+
+  <path d="M195 600 Q135 540 120 480" fill="none" stroke="url(#red)" stroke-width="44" stroke-linecap="round"/>
+  <path d="M195 600 Q135 540 120 480" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="118" cy="472" r="27" fill="url(#skin)" stroke="url(#gold)" stroke-width="6"/>
+  <path d="M78 440 Q64 472 84 498" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+  <path d="M58 458 Q48 480 62 500" fill="none" stroke="url(#gold)" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+
+  <g fill="url(#wool)" stroke="url(#gold)" stroke-width="7">
+    <circle cx="228" cy="270" r="54"/>
+    <circle cx="308" cy="262" r="58"/>
+    <circle cx="270" cy="232" r="60"/>
+  </g>
+
+  <ellipse cx="165" cy="360" rx="44" ry="25" fill="url(#skin)" stroke="url(#gold)" stroke-width="6" transform="rotate(-20 165 360)"/>
+  <ellipse cx="375" cy="360" rx="44" ry="25" fill="url(#skin)" stroke="url(#gold)" stroke-width="6" transform="rotate(20 375 360)"/>
+
+  <path d="M184 340 C 112 292, 112 412, 172 414" fill="none" stroke="url(#gold)" stroke-width="17" stroke-linecap="round"/>
+  <path d="M172 366 C 145 350, 145 395, 168 398" fill="none" stroke="#b8860b" stroke-width="8" stroke-linecap="round"/>
+  <path d="M356 340 C 428 292, 428 412, 368 414" fill="none" stroke="url(#gold)" stroke-width="17" stroke-linecap="round"/>
+  <path d="M368 366 C 395 350, 395 395, 372 398" fill="none" stroke="#b8860b" stroke-width="8" stroke-linecap="round"/>
+
+  <ellipse cx="270" cy="370" rx="78" ry="88" fill="url(#skin)" stroke="url(#gold)" stroke-width="7"/>
+
+  <g fill="url(#wool)" stroke="url(#gold)" stroke-width="5">
+    <circle cx="230" cy="318" r="34"/>
+    <circle cx="270" cy="308" r="38"/>
+    <circle cx="310" cy="318" r="34"/>
+  </g>
+
+  <ellipse cx="240" cy="370" rx="9" ry="13" fill="#1a0a05"/>
+  <ellipse cx="300" cy="370" rx="9" ry="13" fill="#1a0a05"/>
+  <circle cx="243" cy="365" r="3.2" fill="#fff"/>
+  <circle cx="303" cy="365" r="3.2" fill="#fff"/>
+  <circle cx="210" cy="405" r="15" fill="#ff9a9a" opacity="0.5"/>
+  <circle cx="330" cy="405" r="15" fill="#ff9a9a" opacity="0.5"/>
+  <path d="M246 416 Q270 438 294 416" fill="none" stroke="#8a0303" stroke-width="6" stroke-linecap="round"/>
+  <path d="M262 400 Q270 406 278 400" fill="none" stroke="#b36b4a" stroke-width="4" stroke-linecap="round"/>
+</svg>

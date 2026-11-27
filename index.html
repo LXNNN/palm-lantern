@@ -366,12 +366,114 @@
 
         class Smoke { constructor(x, y) { this.x = x; this.y = y; this.vx = random(-0.25, 0.25) * fwScale * SPEED_MOD; this.vy = random(-0.15, 0.15) * fwScale * SPEED_MOD; this.size = random(20, 45) * fwScale; this.growth = random(0.15, 0.3) * fwScale * SPEED_MOD; this.life = random(60, 100) / SPEED_MOD; this.maxLife = this.life; this.alphaStart = random(0.15, 0.3); } update() { this.x += this.vx; this.y += this.vy; this.size += this.growth; this.life--; return this.life > 0; } draw() { const progress = this.life / this.maxLife; const currentAlpha = this.alphaStart * Math.pow(progress, 2.0); if (currentAlpha > 0.005) { fwCtx.save(); fwCtx.globalCompositeOperation = 'source-over'; fwCtx.globalAlpha = currentAlpha; const drawSize = this.size * 2; fwCtx.drawImage(smokeCanvas, this.x - drawSize/2, this.y - drawSize/2, drawSize, drawSize); fwCtx.restore(); } } }
         class Spark { constructor(x, y, vx, vy, isGlitter = false) { this.x = x; this.y = y; this.isGlitter = isGlitter; if (isGlitter) { this.vx = (vx * 0.1 + random(-0.5, 0.5) * fwScale) * SPEED_MOD; this.vy = (vy * 0.1 + random(-0.5, 0.5) * fwScale) * SPEED_MOD; this.friction = 0.92; this.gravity = 0.015 * fwScale * SPEED_MOD; this.life = random(60, 100) / SPEED_MOD; this.maxLife = this.life; this.size = random(1, 2.5) * fwScale; this.flickerSpeed = random(0.3, 0.6) * SPEED_MOD; } else { this.vx = (vx * 0.3 + random(-1.5, 1.5) * fwScale) * SPEED_MOD; this.vy = (vy * 0.3 + random(-1.5, 1.5) * fwScale) * SPEED_MOD; this.friction = 0.96; this.gravity = 0.06 * fwScale * SPEED_MOD; this.life = random(40, 80) / SPEED_MOD; this.maxLife = this.life; this.size = random(1, 3) * fwScale; this.flickerSpeed = random(0.1, 0.3) * SPEED_MOD; } this.flickerOffset = random(0, 100); } update() { this.vx *= this.friction; this.vy *= this.friction; this.vy += this.gravity; this.x += this.vx; this.y += this.vy; this.life -= 1; return this.life > 0; } draw() { const flicker = Math.abs(Math.sin(this.life * this.flickerSpeed + this.flickerOffset)); const baseAlpha = this.life / this.maxLife; let finalAlpha, r, g, b; if (this.isGlitter) { finalAlpha = baseAlpha * (0.3 + flicker * 0.7); r = 255; g = 255; b = 255; } else { finalAlpha = baseAlpha * (0.3 + flicker * 0.7); r = 255; g = 220; b = 150; if (this.life < 20) { g = 150; b = 50; } } fwCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${finalAlpha})`; fwCtx.beginPath(); fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); fwCtx.fill(); } }
-        class WillowParticle { constructor(x, y, angle, speed, colorType, depthScale) { this.x = x; this.y = y; this.vx = Math.cos(angle) * speed * SPEED_MOD; this.vy = Math.sin(angle) * speed * SPEED_MOD; this.friction = 0.94; this.gravity = 0.07 * fwScale * SPEED_MOD; this.life = random(180, 250) / SPEED_MOD; this.maxLife = this.life; this.trail = []; this.maxTrail = 20; this.colorType = colorType; this.depthScale = depthScale; this.width = (colorType === 'gold' ? 1.5 : 1.0) * fwScale * depthScale; } update() { this.trail.push({x: this.x, y: this.y}); if(this.trail.length > this.maxTrail) this.trail.shift(); this.vx *= this.friction; this.vy *= this.friction; this.vy += this.gravity; this.x += this.vx; this.y += this.vy; this.life--; if(this.life % 8 === 0) smokes.push(new Smoke(this.x, this.y)); return this.life > 0; } draw() { if(this.trail.length < 2) return; const progress = this.life / this.maxLife; const alpha = Math.min(1, progress * 3); fwCtx.beginPath(); fwCtx.moveTo(this.trail[0].x, this.trail[0].y); for(let i=1; i<this.trail.length; i++) fwCtx.lineTo(this.trail[i].x, this.trail[i].y); fwCtx.lineTo(this.x, this.y); fwCtx.lineCap = 'round'; fwCtx.lineWidth = this.width * alpha; let strokeStyle = `rgba(255, 240, 150, ${alpha})`; if(this.colorType === 'red') strokeStyle = `rgba(255, 80, 80, ${alpha})`; else if(this.colorType === 'blue') strokeStyle = `rgba(80, 180, 255, ${alpha})`; fwCtx.strokeStyle = strokeStyle; fwCtx.stroke(); if (progress > 0.05) { const s = this.width * 2.5; fwCtx.drawImage(glowCanvas, this.x - s/2, this.y - s/2, s, s); } } }
+        class WillowParticle {
+            constructor(x, y, angle, speed, colorType, depthScale) {
+                this.x = x;
+                this.y = y;
+                this.vx = Math.cos(angle) * speed * SPEED_MOD;
+                this.vy = Math.sin(angle) * speed * SPEED_MOD;
+                this.friction = 0.94;
+                this.gravity = 0.07 * fwScale * SPEED_MOD;
+                this.life = random(180, 250) / SPEED_MOD;
+                this.maxLife = this.life;
+                this.trail = [];
+                this.maxTrail = 20;
+                this.colorType = colorType;
+                this.depthScale = depthScale;
+                this.width = (colorType === 'gold' ? 1.5 : 1.0) * fwScale * depthScale;
+            }
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > this.maxTrail) this.trail.shift();
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                if (this.life % 8 === 0) smokes.push(new Smoke(this.x, this.y));
+                return this.life > 0;
+            }
+            draw() {
+                if (this.trail.length < 2) return;
+                const progress = this.life / this.maxLife;
+                const alpha = Math.min(1, progress * 3);
+                const rgb = this.colorType === 'red' ? '255, 55, 65'
+                    : this.colorType === 'blue' ? '90, 190, 255'
+                    : '255, 215, 80';
+                const points = this.trail.concat([{ x: this.x, y: this.y }]);
+                const n = points.length;
+                fwCtx.lineCap = 'round';
+                fwCtx.lineJoin = 'round';
+                fwCtx.strokeStyle = `rgb(${rgb})`;
+
+                // 整条线的柔光
+                fwCtx.globalAlpha = 0.18 * alpha;
+                fwCtx.lineWidth = this.width * 3.6;
+                fwCtx.beginPath();
+                fwCtx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < n; i++) fwCtx.lineTo(points[i].x, points[i].y);
+                fwCtx.stroke();
+
+                // 从花心到结尾，逐渐变粗、变实
+                const chunks = 4;
+                for (let c = 0; c < chunks; c++) {
+                    const start = Math.max(0, Math.floor((c * (n - 1)) / chunks) - 1);
+                    const end = Math.floor(((c + 1) * (n - 1)) / chunks);
+                    if (end <= start) continue;
+                    const f = (c + 0.7) / chunks;
+                    fwCtx.globalAlpha = alpha * (0.22 + 0.78 * f);
+                    fwCtx.lineWidth = this.width * (0.35 + 1.15 * f);
+                    fwCtx.beginPath();
+                    fwCtx.moveTo(points[start].x, points[start].y);
+                    for (let i = start + 1; i <= end; i++) fwCtx.lineTo(points[i].x, points[i].y);
+                    fwCtx.stroke();
+                }
+
+                // 结尾光点
+                if (progress > 0.05) {
+                    const s = this.width * 6;
+                    fwCtx.globalAlpha = alpha;
+                    fwCtx.drawImage(glowCanvas, this.x - s / 2, this.y - s / 2, s, s);
+                    fwCtx.globalAlpha = alpha;
+                    fwCtx.fillStyle = 'rgba(255, 255, 235, 1)';
+                    fwCtx.beginPath();
+                    fwCtx.arc(this.x, this.y, Math.max(1, this.width * 0.55), 0, Math.PI * 2);
+                    fwCtx.fill();
+                }
+                fwCtx.globalAlpha = 1;
+            }
+        }
         class Shell { constructor(x, y, targetX, targetY, type, depthScale) { this.x = x; this.y = y; this.targetY = targetY; this.type = type; this.depthScale = depthScale; const g = 0.15 * fwScale * SPEED_MOD; const dy = y - targetY; const vy = Math.sqrt(2 * g * dy); const t = vy / g; const dx = targetX - x; const vx = dx / t; this.vx = vx; this.vy = -vy; this.gravity = g; this.isDead = false; } update() { this.vy += this.gravity; this.x += this.vx; this.y += this.vy; if (Math.random() > 0.7) smokes.push(new Smoke(this.x, this.y)); if (this.vy >= 0) { this.isDead = true; if(this.type === 'willow') explodeWillow(this.x, this.y, this.depthScale); else if(this.type === 'comet') explodeComet(this.x, this.y); for(let i=0; i<6; i++) smokes.push(new Smoke(this.x + random(-10,10), this.y + random(-10,10))); } return !this.isDead; } draw() { const size = 6 * fwScale * this.depthScale; fwCtx.drawImage(glowCanvas, this.x - size, this.y - size, size*2, size*2); fwCtx.beginPath(); fwCtx.moveTo(this.x, this.y); fwCtx.lineTo(this.x - this.vx*2.5, this.y - this.vy*2.5); fwCtx.lineCap = 'round'; fwCtx.strokeStyle = 'rgba(255, 200, 100, 0.3)'; fwCtx.lineWidth = 4 * fwScale; fwCtx.stroke(); fwCtx.beginPath(); fwCtx.moveTo(this.x, this.y); fwCtx.lineTo(this.x - this.vx*2.5, this.y - this.vy*2.5); fwCtx.strokeStyle = 'rgba(255, 255, 220, 0.95)'; fwCtx.lineWidth = 1.5 * fwScale; fwCtx.stroke(); } }
 
         function explodeWillow(x, y, depthScale) { const count = 80; const colors = ['gold', 'red']; for(let i=0; i<count; i++) { const angle = random(0, Math.PI*2); const speed = random(5, 22) * fwScale * depthScale; const color = colors[Math.floor(Math.random() * colors.length)]; particles.push(new WillowParticle(x, y, angle, speed, color, depthScale)); } }
         function explodeComet(x, y) { for(let k=0; k<15; k++) { const ang = random(0, Math.PI*2); const spd = random(2, 8) * fwScale; particles.push(new Spark(x, y, Math.cos(ang)*spd, Math.sin(ang)*spd, true)); } }
         function resizeFireworks() { fwWidth = fwCanvas.width = window.innerWidth; fwHeight = fwCanvas.height = window.innerHeight; fwScale = Math.min(fwWidth, fwHeight) / 900; }
+
+        function maskFireworksOverLantern() {
+            if (!camera) return;
+            const center = new THREE.Vector3(0, -0.6, 0).project(camera);
+            const cx = (center.x * 0.5 + 0.5) * fwWidth;
+            const cy = (-center.y * 0.5 + 0.5) * fwHeight;
+            const edge = new THREE.Vector3(9.6, -0.6, 0).project(camera);
+            const ex = (edge.x * 0.5 + 0.5) * fwWidth;
+            const rx = Math.max(80, Math.abs(ex - cx) * 1.05);
+            const ry = rx * 0.95;
+
+            fwCtx.save();
+            fwCtx.globalCompositeOperation = 'destination-out';
+            fwCtx.translate(cx, cy);
+            fwCtx.scale(1, ry / rx);
+            const g = fwCtx.createRadialGradient(0, 0, rx * 0.55, 0, 0, rx * 1.18);
+            g.addColorStop(0, 'rgba(0, 0, 0, 0.82)');
+            g.addColorStop(0.65, 'rgba(0, 0, 0, 0.5)');
+            g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            fwCtx.fillStyle = g;
+            fwCtx.beginPath();
+            fwCtx.arc(0, 0, rx * 1.18, 0, Math.PI * 2);
+            fwCtx.fill();
+            fwCtx.restore();
+        }
         function triggerChapter3Fireworks() {
             const cx = fwWidth / 2; const targetBaseY = fwHeight * 0.25; const spreadW = fwWidth * 0.6; const startX = cx - spreadW / 2; const stepX = spreadW / 4; 
             for(let i=0; i<5; i++) { const targetX = startX + stepX * i; const targetY = targetBaseY + random(-50, 50) * fwScale; const depth = random(0.8, 1.2); setTimeout(() => { particles.push(new Shell(cx, fwHeight, targetX, targetY, 'willow', depth)); }, i * 200); }
@@ -393,7 +495,8 @@
         let scene, camera, renderer, composer, mainGroup;
         let clock = new THREE.Clock();
         let particleSystem = []; let snowSystem; let lanternShell; let lanternStatic; let lanternReady = false;
-        let goldTop = null; let goldBottom = null; let goldEnterStart = 0; let fuReady = false; let settleSince = 0;
+        let lanternGlowLight = null, lanternGlowSprite = null, lanternLightLevel = 0, lanternLightStart = 0;
+        let goldTop = null; let goldBottom = null; let goldEnterStart = 0; let fuReady = false;
         let handLandmarker, video, webcamCanvas, webcamCtx;
         let raycaster = new THREE.Raycaster(); let mouse = new THREE.Vector2();
 
@@ -680,6 +783,7 @@
 
             const innerGlow = new THREE.PointLight(0xff6a00, 300, 28);
             innerGlow.position.set(0, 0, 0);
+            lanternGlowLight = innerGlow;
             lanternStatic.add(innerGlow);
 
             const glowCanvas = document.createElement('canvas');
@@ -697,6 +801,7 @@
             }));
             glowSprite.scale.set(13, 13, 1);
             glowSprite.position.set(0, 0, 0);
+            lanternGlowSprite = glowSprite;
             lanternStatic.add(glowSprite);
 
             window.__debug = {
@@ -705,6 +810,8 @@
                 particles: particleSystem,
                 getHandLandmarker: () => handLandmarker,
                 getPredictCount: () => predictCount,
+                launchFireworks: () => triggerChapter3Fireworks(),
+                getFireworks: () => ({ particles: particles.length, smokes: smokes.length }),
                 getLanternState: () => ({
                     ready: lanternReady,
                     shellOpacity: lanternShell ? lanternShell.material.opacity : 0,
@@ -981,14 +1088,14 @@
         function changeState(newState) {
             if (STATE.mode === newState) return;
             
-            // FIXED: Fireworks only on COLLAPSE (Scatter -> Tree), AND has expanded once
+            // 灯笼一开始聚合就放火箭，让烟花在聚合过程中升空
             if (newState === 'SCATTER') {
                 STATE.hasExpandedOnce = true;
             }
             if (newState === 'TREE' && STATE.mode === 'SCATTER' && STATE.hasExpandedOnce) {
-                 triggerChapter3Fireworks();
+                triggerChapter3Fireworks();
             }
-            
+
             STATE.mode = newState;
             STATE.focusTarget = null;
             if (newState === 'TREE') goldEnterStart = performance.now();
@@ -1083,6 +1190,7 @@
             fwCtx.globalCompositeOperation = 'lighter';
             let sIdx = smokes.length; while(sIdx--) { if(!smokes[sIdx].update()) smokes.splice(sIdx, 1); else smokes[sIdx].draw(); }
             let pIdx = particles.length; while(pIdx--) { if(!particles[pIdx].update()) particles.splice(pIdx, 1); else particles[pIdx].draw(); }
+            if (particles.length || smokes.length) maskFireworksOverLantern();
             if (snowSystem) {
                 const pos = snowSystem.geometry.attributes.position.array;
                 const vel = snowSystem.geometry.userData.vel;
@@ -1129,9 +1237,6 @@
                 maxDist2 = Math.max(maxDist2, p.mesh.position.distanceToSquared(p.posTree));
             }
             const bodySettled = maxDist2 < 0.36;
-            if (!bodySettled || STATE.mode !== 'TREE') settleSince = 0;
-            else if (!settleSince) settleSince = performance.now();
-            const allSettled = bodySettled && settleSince > 0 && (performance.now() - settleSince) > 1400;
             let goldEntered = true;
             if (goldTop && goldBottom) {
                 const showGold = STATE.mode === 'TREE';
@@ -1150,18 +1255,23 @@
                     goldEntered = false;
                 }
             }
-            lanternReady = STATE.mode === 'TREE' && allSettled && goldEntered && fuReady;
-            if (lanternShell) {
-                if (STATE.mode !== 'TREE') {
-                    lanternShell.material.opacity = 0;
-                    lanternShell.visible = false;
-                } else {
-                    const targetOpacity = lanternReady ? 0.32 : 0;
-                    lanternShell.material.opacity += (targetOpacity - lanternShell.material.opacity) * Math.min(1, dt * 5);
-                    lanternShell.visible = lanternShell.material.opacity > 0.01;
-                }
+            lanternReady = STATE.mode === 'TREE' && bodySettled && goldEntered && fuReady;
+            if (STATE.mode === 'TREE' && lanternReady) {
+                // 聚拢成型后立刻开始缓入，1 秒亮到最亮
+                if (!lanternLightStart) lanternLightStart = performance.now();
+                const t = Math.min(1, (performance.now() - lanternLightStart) / 1000);
+                lanternLightLevel = t * t * (3 - 2 * t);
+            } else {
+                lanternLightLevel = 0;
+                lanternLightStart = 0;
             }
-            if (lanternStatic) lanternStatic.visible = lanternReady;
+            if (lanternShell) {
+                lanternShell.material.opacity = 0.32 * lanternLightLevel;
+                lanternShell.visible = lanternLightLevel > 0.01;
+            }
+            if (lanternGlowSprite) lanternGlowSprite.material.opacity = 0.9 * lanternLightLevel;
+            if (lanternGlowLight) lanternGlowLight.intensity = 300 * lanternLightLevel;
+            if (lanternStatic) lanternStatic.visible = lanternLightLevel > 0.005;
             if (!uiHidden && uiLayerEl) uiLayerEl.style.opacity = STATE.mode === 'FOCUS' ? '0' : '1';
             composer.render();
         }

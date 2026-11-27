@@ -380,7 +380,7 @@
                 this.maxTrail = 20;
                 this.colorType = colorType;
                 this.depthScale = depthScale;
-                this.width = (colorType === 'gold' ? 1.5 : 1.0) * fwScale * depthScale;
+                this.width = (colorType === 'gold' ? 1.4 : 0.95) * fwScale * depthScale;
             }
             update() {
                 this.trail.push({ x: this.x, y: this.y });
@@ -409,7 +409,7 @@
 
                 // 整条线的柔光
                 fwCtx.globalAlpha = 0.18 * alpha;
-                fwCtx.lineWidth = this.width * 3.6;
+                fwCtx.lineWidth = this.width * 3.3;
                 fwCtx.beginPath();
                 fwCtx.moveTo(points[0].x, points[0].y);
                 for (let i = 1; i < n; i++) fwCtx.lineTo(points[i].x, points[i].y);
@@ -423,7 +423,7 @@
                     if (end <= start) continue;
                     const f = (c + 0.7) / chunks;
                     fwCtx.globalAlpha = alpha * (0.22 + 0.78 * f);
-                    fwCtx.lineWidth = this.width * (0.35 + 1.15 * f);
+                    fwCtx.lineWidth = this.width * (0.32 + 1.05 * f);
                     fwCtx.beginPath();
                     fwCtx.moveTo(points[start].x, points[start].y);
                     for (let i = start + 1; i <= end; i++) fwCtx.lineTo(points[i].x, points[i].y);
